@@ -1,4 +1,4 @@
-package VigenereCrypting;
+package vigenerecrypting;
 
 import java.util.HashMap;
 import java.util.Map;

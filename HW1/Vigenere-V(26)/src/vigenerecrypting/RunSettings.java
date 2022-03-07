@@ -1,4 +1,4 @@
-package VigenereCrypting;
+package vigenerecrypting;
 
 // a class which keeps the arguments settings
 public class RunSettings {

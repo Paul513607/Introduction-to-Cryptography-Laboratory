@@ -1,6 +1,6 @@
-import VigenereCrypting.RunSettings;
-import VigenereCrypting.VigenereEncrypter;
-import VigenereCrypting.VigenereDecrypter;
+import vigenerecrypting.RunSettings;
+import vigenerecrypting.VigenereEncrypter;
+import vigenerecrypting.VigenereDecrypter;
 
 import java.io.File;
 

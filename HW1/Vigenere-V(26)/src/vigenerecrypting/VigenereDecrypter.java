@@ -1,6 +1,5 @@
-package VigenereCrypting;
+package vigenerecrypting;
 
-import javax.print.DocFlavor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
