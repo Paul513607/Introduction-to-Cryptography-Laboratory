@@ -315,7 +315,7 @@ public class VigenereDecrypter {
         // key = shortenKey(key);
     }
 
-    // decrypt the text using the formula: plainText[i] = (encryptedText[i] - 'A' - (key[i mod keyLength] - 'A')) % 26
+    // decrypt the text using the formula: plainText[i] = (encryptedText[i] - 'A' - (key[i mod keyLength] - 'A')) % 26 + 'A'
     public void decryptText() {
         if (RunSettings.decryptSet == 1) {
             findKeyTrigrams();

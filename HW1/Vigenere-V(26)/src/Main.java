@@ -30,9 +30,10 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Syntax: java Main.java <encrypt / e / decrypt / d> <second_option>\n " +
-                    "(if \"encrypt/e\" selected specify [gen] after \"encrypt/e\" for random keygen)\n" +
-                    "(if \"decrypt/d\" selected specify ic/exh after \"decrypt/e\" for a index_of_coincidence / more exhaustive key search)");
+            System.out.println("Syntax: java Main.java <encrypt / e / decrypt / d> <[second_option]>\n" +
+                    "\t(if \"encrypt/e\" selected specify [gen] after \"encrypt/e\" for random keygen)\n" +
+                    "\t(if \"decrypt/d\" selected specify [ic/exh] after \"decrypt/e\" for a index_of_coincidence / a more exhaustive key search)");
+            return;
         }
         if (args[0].equals("encrypt") || args[0].equals("e")) {
             if (args.length > 1) {
