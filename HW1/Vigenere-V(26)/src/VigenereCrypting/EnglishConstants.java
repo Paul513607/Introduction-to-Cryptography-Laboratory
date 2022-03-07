@@ -3,6 +3,7 @@ package VigenereCrypting;
 import java.util.HashMap;
 import java.util.Map;
 
+// a class of english constants
 public class EnglishConstants {
     static public final int NO_LETTERS = 26;
     static public final Map<Character, Double> LETTER_FREQUENCIES = new HashMap<>();

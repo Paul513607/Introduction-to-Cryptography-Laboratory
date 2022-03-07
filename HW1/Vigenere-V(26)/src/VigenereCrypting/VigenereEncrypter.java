@@ -35,7 +35,7 @@ public class VigenereEncrypter {
             generateKey();
         }
         else {
-            key = "FINDME";
+            key = "AAAAAAAAB";
             key.toUpperCase();
         }
     }
@@ -56,6 +56,7 @@ public class VigenereEncrypter {
         return encryptedText;
     }
 
+    // removes all non-letter characters and converts all the others to uppercase
     public void convertToPlainText(String text) {
         StringBuilder plainTextBuilder = new StringBuilder();
         for (int i = 0; i < text.length(); ++i) {
@@ -68,9 +69,10 @@ public class VigenereEncrypter {
         plainText = plainTextBuilder.toString();
     }
 
+    // if the option "gen" is set for encryption, we generate a random key
     public void generateKey() {
         Random random = new Random();
-        int keyLength = random.nextInt(2, 20); // generate a key of length [2, 19]
+        int keyLength = random.nextInt(2, 21); // generate a key of length [2, 20]
         StringBuilder keyBuilder = new StringBuilder();
         for (int i = 0; i < keyLength; ++i) {
             char ch = (char) random.nextInt('A', 'Z' + 1);
@@ -79,6 +81,7 @@ public class VigenereEncrypter {
         key = keyBuilder.toString();
     }
 
+    // using the key we encrypt the text (formula: encrypted[i] = (plainText[i] - 'A' + (key[i mod keyLength] - 'A')) % 26 + 'A')
     public void encryptPlainText() {
         int keyLength = key.length();
         StringBuilder encryptedTextBuilder = new StringBuilder();
