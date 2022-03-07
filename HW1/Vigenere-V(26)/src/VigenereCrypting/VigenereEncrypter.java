@@ -34,6 +34,10 @@ public class VigenereEncrypter {
         if (option == 1) {
             generateKey();
         }
+        else if (option == 2) {
+            key = RunSettings.keyFromArgs;
+            key.toUpperCase();
+        }
         else {
             key = "AAAAAAAAB";
             key.toUpperCase();

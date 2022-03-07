@@ -163,7 +163,7 @@ public class VigenereDecrypter {
         bestKeyLenHits.put(candidateKeyLen, maxHits);
         double avgError = 0;
         for (int tempKeyLen = 2; tempKeyLen <= 20; ++tempKeyLen)
-            avgError += Math.abs(maxHits - keyLenToHits.get(tempKeyLen));
+            avgError += keyLenToHits.get(tempKeyLen);
         avgError = avgError / 19; // 19 values for the keys to try
 
         for (int tempKeyLen = 2; tempKeyLen <= 20; ++tempKeyLen)

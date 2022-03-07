@@ -31,13 +31,24 @@ public class Main {
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Syntax: java Main.java <encrypt / e / decrypt / d> <[second_option]>\n" +
-                    "\t(if \"encrypt/e\" selected specify [gen] after \"encrypt/e\" for random keygen)\n" +
+                    "\t(if \"encrypt/e\" selected specify [gen / input <key>] after \"encrypt/e\" for random keygen)\n" +
                     "\t(if \"decrypt/d\" selected specify [ic/exh] after \"decrypt/e\" for a index_of_coincidence / a more exhaustive key search)");
             return;
         }
         if (args[0].equals("encrypt") || args[0].equals("e")) {
             if (args.length > 1) {
-                RunSettings.encryptSet = args[1].equals("gen") ? 1 : 0;
+                if (args[1].equals("gen")) {
+                    RunSettings.encryptSet = 1;
+                }
+                else if (args[1].equals("input")) {
+                    RunSettings.encryptSet = 2;
+                    if (args.length > 2)
+                        RunSettings.keyFromArgs = args[2];
+                }
+                else {
+                    RunSettings.encryptSet = 0;
+                }
+
             }
             testEncryption();
         }

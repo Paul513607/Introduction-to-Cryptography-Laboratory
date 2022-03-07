@@ -5,4 +5,5 @@ public class RunSettings {
     static public int encryptSet = 0;
     static public int decryptSet = 0;
     static public String fileName = "";
+    static public String keyFromArgs = "KEY";
 }
