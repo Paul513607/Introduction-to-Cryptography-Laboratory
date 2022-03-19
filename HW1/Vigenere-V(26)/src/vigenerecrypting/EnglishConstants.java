@@ -38,5 +38,4 @@ public class EnglishConstants {
     }
     // letter frequencies were taken from https://www3.nd.edu/~busiforc/handouts/cryptography/letterfrequencies.html
 
-
 }

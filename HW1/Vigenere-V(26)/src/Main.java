@@ -6,24 +6,24 @@ import java.io.File;
 
 public class Main {
     static void testEncryption() {
-        File testFile = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/textFiles/testFile.txt");
+        File testFile = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/vigenereTestFiles/testFile.txt");
         VigenereEncrypter vigenereEncrypter = new VigenereEncrypter(testFile, RunSettings.encryptSet);
 
         vigenereEncrypter.encryptPlainText();
 
         // vigenereEncrypter.printEncryptedText();
-        File fileToWriteTo = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/textFiles/testFileEncrypted.txt");
+        File fileToWriteTo = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/vigenereTestFiles/testFileEncrypted.txt");
         vigenereEncrypter.printEncryptedTextToFile(fileToWriteTo);
     }
 
     static void testDecryption() {
-        File testFile = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/textFiles/testFileEncrypted.txt");
+        File testFile = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/vigenereTestFiles/testFileEncrypted.txt");
         VigenereDecrypter vigenereDecrypter = new VigenereDecrypter(testFile);
 
         vigenereDecrypter.decryptText();
 
         // vigenereDecrypter.printDecryptedTextAndKey();
-        File fileToWriteTo = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/textFiles/testFileDecrypted.txt");
+        File fileToWriteTo = new File("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW1/vigenereTestFiles/testFileDecrypted.txt");
         vigenereDecrypter.printKey();
         vigenereDecrypter.printDecryptedTextToFile(fileToWriteTo);
     }
