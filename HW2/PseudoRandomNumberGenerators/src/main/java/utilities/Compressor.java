@@ -1,12 +1,14 @@
 package utilities;
 
+import generators.RunSettings;
+
 import java.io.*;
 import java.nio.file.Path;
 import java.util.zip.DeflaterOutputStream;
 
 public class Compressor {
     private final String DEFAULT_REPEAT_STRING = "01";
-    private final int MAX_BITSET_LEN = 10000;
+    private final int MAX_BITSET_LEN = RunSettings.MAX_ITERATIONS;
     private String defaultPath;
     private String toCompress;
 

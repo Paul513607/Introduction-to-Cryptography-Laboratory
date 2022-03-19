@@ -14,11 +14,11 @@ import java.util.BitSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BBSGeneratorTest {
-    private final int MAX_BITSET_LEN = 10000;
+    private final int MAX_BITSET_LEN = RunSettings.MAX_ITERATIONS;
     private final double CLOSENESS_FACTOR = 5.0;
     private final double COMPRESSION_RATE_TARGET = 2.0;
     private String outputBitString;
-    private BitSet outputBitSet = new BitSet(1000);
+    private BitSet outputBitSet = new BitSet(MAX_BITSET_LEN);
 
     @BeforeEach
     public void bbsGenerate() {
@@ -42,9 +42,9 @@ class BBSGeneratorTest {
         counter0 = counter0 / outputBitString.length() * 100.0;
         counter1 = counter1 / outputBitString.length() * 100.0;
 
+        System.out.println("0s counter: " + counter0);
+        System.out.println("1s counter: " + counter1);
         Assertions.assertTrue(Math.abs(counter0 - counter1) <= CLOSENESS_FACTOR);
-        System.out.println(counter0);
-        System.out.println(counter1);
     }
 
     @Test
@@ -61,6 +61,8 @@ class BBSGeneratorTest {
         Path pathDefault = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/defaultTest.zip");
         Path path = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/test.zip");
 
+        System.out.println("BBS Generated compression: " + Files.size(path));
+        System.out.println("Default compression: " + Files.size(pathDefault));
         assertTrue(Math.floor((double) Files.size(path) / (double) Files.size(pathDefault)) > COMPRESSION_RATE_TARGET);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Formatter;
 import java.util.Random;
 
 public class JacobiGenerator implements Generator {
-    private final int MAX_BITSET_LEN = 10000;
+    private final int MAX_BITSET_LEN = RunSettings.MAX_ITERATIONS;
     private BigInteger bigIntegerN;
     private BigInteger seed0;
     private String outputBitString = new String();

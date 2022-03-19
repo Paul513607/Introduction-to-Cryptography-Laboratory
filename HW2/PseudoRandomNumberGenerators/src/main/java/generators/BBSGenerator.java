@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Random;
 
 public class BBSGenerator implements Generator {
-    private final int MAX_BITSET_LEN = 10000;
+    private final int MAX_BITSET_LEN = RunSettings.MAX_ITERATIONS;
     private BigInteger bigIntegerN;
     private BigInteger seed0;
     private String outputBitString = new String();
