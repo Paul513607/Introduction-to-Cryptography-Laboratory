@@ -1,9 +1,6 @@
 package utilities;
 
-import generators.RunSettings;
-
 import java.io.*;
-import java.nio.file.Path;
 import java.util.zip.DeflaterOutputStream;
 
 public class Compressor {

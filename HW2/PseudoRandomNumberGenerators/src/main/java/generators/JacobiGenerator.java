@@ -1,20 +1,23 @@
 package generators;
 
+import utilities.MultiThread;
+import utilities.RunSettings;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.BitSet;
-import java.util.Date;
-import java.util.Formatter;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class JacobiGenerator implements Generator {
+public class JacobiGenerator extends Thread implements Generator {
     private final int MAX_BITSET_LEN = RunSettings.MAX_ITERATIONS;
     private BigInteger bigIntegerN;
     private BigInteger seed0;
@@ -110,7 +113,7 @@ public class JacobiGenerator implements Generator {
         seed0 = seed0.mod(bigIntegerN);
     }
 
-    private static int calcJacobiSymbol(BigInteger a, BigInteger bigOdd) {
+    public static int calcJacobiSymbol(BigInteger a, BigInteger bigOdd) {
         BigInteger b = a.mod(bigOdd);
         BigInteger c = bigOdd;
         int s = 1;
@@ -137,19 +140,53 @@ public class JacobiGenerator implements Generator {
         return s * b.intValue();
     }
 
-    @Override
-    public void calculateOutput() {
+    public String multiCalculateOutput() {
         StringBuilder outputBitStringBuilder = new StringBuilder();
 
         for (int index = 0; index < MAX_BITSET_LEN; ++index) {
             BigInteger seedCurr = seed0.add(BigInteger.valueOf(index));
-            int jacobiCalc = calcJacobiSymbol(seedCurr, bigIntegerN);
+            int jacobiCalc = JacobiGenerator.calcJacobiSymbol(seedCurr, bigIntegerN);
             if (jacobiCalc == -1)
                 jacobiCalc++;
             outputBitStringBuilder.append(jacobiCalc);
         }
 
-        outputBitString = outputBitStringBuilder.toString();
+        return outputBitStringBuilder.toString();
+    }
+
+    public String threadedCalculateOutput() {
+        StringBuilder outputBitStringBuilder = new StringBuilder();
+        List<Future> resultFutures = new ArrayList<>();
+
+        ExecutorService service = Executors.newFixedThreadPool(RunSettings.MAX_THREADS);
+        int lengthToGenerate = MAX_BITSET_LEN / RunSettings.MAX_THREADS;
+
+        for (int threadNo = 0; threadNo < RunSettings.MAX_THREADS; ++threadNo) {
+            MultiThread multiThread = new MultiThread(threadNo, 2, lengthToGenerate, null, this);
+            Future<String> currFuture = service.submit(multiThread);
+            resultFutures.add(currFuture);
+        }
+
+        for (int threadNo = 0; threadNo < RunSettings.MAX_THREADS; ++threadNo) {
+            Future<String> future = resultFutures.get(threadNo);
+            try {
+                String currResult = future.get();
+                outputBitStringBuilder.append(currResult);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        service.shutdown();
+
+        return outputBitStringBuilder.toString();
+    }
+
+    @Override
+    public void calculateOutput() {
+        // outputBitString = multiCalculateOutput();
+        outputBitString = threadedCalculateOutput();
+
         for (int i = 0; i < outputBitString.length(); ++i)
             if (outputBitString.charAt(i) == '1')
                 outputBitSet.set(i);

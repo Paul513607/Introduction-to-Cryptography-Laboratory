@@ -1,13 +1,18 @@
 package generators;
 
+import utilities.MultiThread;
+import utilities.RunSettings;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.BitSet;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class BBSGenerator implements Generator {
     private final int MAX_BITSET_LEN = RunSettings.MAX_ITERATIONS;
@@ -80,19 +85,54 @@ public class BBSGenerator implements Generator {
         seed0 = seed0.mod(bigIntegerN);
     }
 
-    @Override
-    public void calculateOutput() {
-        BigInteger seedPrev = seed0;
+    public String multiCalculateOutput() {
         StringBuilder outputBitStringBuilder = new StringBuilder();
+
+        BigInteger seedPrev = seed0;
         outputBitStringBuilder.append(seed0.mod(BigInteger.valueOf(2)));
-        int index = 0;
+
         for (int i = 0; i < MAX_BITSET_LEN; ++i) {
             BigInteger seedNext = seedPrev.multiply(seedPrev).mod(bigIntegerN);
             outputBitStringBuilder.append(seedNext.mod(BigInteger.valueOf(2)));
             seedPrev = seedNext;
         }
 
-        outputBitString = outputBitStringBuilder.toString();
+        return outputBitStringBuilder.toString();
+    }
+
+    public String threadedCalculateOutput() {
+        StringBuilder outputBitStringBuilder = new StringBuilder();
+        List<Future> resultFutures = new ArrayList<>();
+
+        ExecutorService service = Executors.newFixedThreadPool(RunSettings.MAX_THREADS);
+        int lengthToGenerate = MAX_BITSET_LEN / RunSettings.MAX_THREADS;
+
+        for (int threadNo = 0; threadNo < RunSettings.MAX_THREADS; ++threadNo) {
+            MultiThread multiThread = new MultiThread(threadNo, 1, lengthToGenerate, this, null);
+            Future<String> currFuture = service.submit(multiThread);
+            resultFutures.add(currFuture);
+        }
+
+        for (int threadNo = 0; threadNo < RunSettings.MAX_THREADS; ++threadNo) {
+            Future<String> future = resultFutures.get(threadNo);
+            try {
+                String currResult = future.get();
+                outputBitStringBuilder.append(currResult);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
+        service.shutdown();
+
+        return outputBitStringBuilder.toString();
+    }
+
+    @Override
+    public void calculateOutput() {
+        // outputBitString = multiCalculateOutput();
+        outputBitString = threadedCalculateOutput();
+
         for (int i = 0; i < outputBitString.length(); ++i)
             if (outputBitString.charAt(i) == '1')
                 outputBitSet.set(i);

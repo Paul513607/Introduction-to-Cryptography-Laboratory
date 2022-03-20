@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import utilities.Compressor;
+import utilities.RunSettings;
 
 import java.io.IOException;
 import java.nio.file.Files;

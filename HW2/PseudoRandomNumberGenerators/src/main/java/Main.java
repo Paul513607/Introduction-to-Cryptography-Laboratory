@@ -1,12 +1,10 @@
 import generators.*;
-
-import java.math.BigInteger;
-import java.security.SecureRandom;
-import java.util.Date;
-import java.util.Random;
+import utilities.RunSettings;
 
 public class Main {
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
+
         if (args.length < 1) {
             System.out.println("Syntax: java Main <bbs/jac> [<no_of_iterations> -- default: 10^6]");
         }
@@ -28,5 +26,8 @@ public class Main {
             // System.out.println(jacobiGenerator.getOutputBitString());
             jacobiGenerator.writeNumberToDefaultFile();
         }
+
+        long endTime = System.nanoTime();
+        System.out.println("Time taken: " + ((double) (endTime - startTime) / 1000000000.0) + " seconds");
     }
 }
