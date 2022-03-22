@@ -1,0 +1,8 @@
+.idea
+target
+vigenereTestFiles
+substitutionTestFiles
+bbsNumber.txt
+jacobiNumber.txt
+BBSCompressionTest
+JacobiCompressionTest
