@@ -50,7 +50,7 @@ class BBSGeneratorTest {
 
     @Test
     public void compressionRateTest() throws IOException {
-        Compressor compressor = new Compressor(outputBitString, "/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/");
+        Compressor compressor = new Compressor(outputBitString, "/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBSCompressionTest/");
         try {
             compressor.compressDefault();
             compressor.compressInputString();
@@ -59,8 +59,8 @@ class BBSGeneratorTest {
             err.printStackTrace();
         }
 
-        Path pathDefault = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/defaultTest.zip");
-        Path path = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/test.zip");
+        Path pathDefault = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBSCompressionTest/defaultTest.zip");
+        Path path = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBSCompressionTest/test.zip");
 
         System.out.println("BBS Generated compression: " + Files.size(path));
         System.out.println("Default compression: " + Files.size(pathDefault));

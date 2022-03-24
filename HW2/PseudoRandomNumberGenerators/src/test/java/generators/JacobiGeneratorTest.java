@@ -59,8 +59,8 @@ class JacobiGeneratorTest {
             err.printStackTrace();
         }
 
-        Path pathDefault = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/defaultTest.zip");
-        Path path = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/BBScompressionTest/test.zip");
+        Path pathDefault = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/JacobiCompressionTest/defaultTest.zip");
+        Path path = Paths.get("/home/paul/Facultate/An2/Semestru2/IC/Introduction-to-Cryptography-Laboratory/HW2/JacobiCompressionTest/test.zip");
 
         System.out.println("Jacobi Generated compression: " + Files.size(path));
         System.out.println("Default compression: " + Files.size(pathDefault));
