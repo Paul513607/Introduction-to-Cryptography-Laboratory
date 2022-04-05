@@ -13,7 +13,7 @@ class RC4CryptosystemTest {
     private static final int MAX_ITERATIONS = 100000;
     private static final double EPSILON = 0.001;
 
-    RC4Cryptosystem rc4Cryptosystem;
+    private RC4Cryptosystem rc4Cryptosystem;
     private String secretKey = "HIIAMKEY";
     private String keyStream;
     private String plainText;

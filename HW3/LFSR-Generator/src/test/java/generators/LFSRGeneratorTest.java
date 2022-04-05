@@ -1,5 +1,6 @@
 package generators;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,5 +22,10 @@ class LFSRGeneratorTest {
     @Test
     public void checkIfRightPeriod() {
         assertTrue(lfsrGenerator.getGeneratorPeriod() == Math.pow(2, REGISTER_LENGTH) - 1);
+    }
+
+    @AfterEach
+    public void printGeneratorPeriod() {
+        System.out.println("Generator period: " + lfsrGenerator.getGeneratorPeriod());
     }
 }
