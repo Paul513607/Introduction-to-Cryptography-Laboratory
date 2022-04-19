@@ -18,6 +18,35 @@ We run a test to check if the algorithm has the following bias: the second byte 
 
 
 # Homework 4
+Implementation of the DES Cryptosystem with both encryption and decryption with the following steps: <br />
+* We give it a key, it generates the 16 keys needed for the encryption / decryption <br />
+* We read the plainText / encryptedText from an input file <br />
+* For encryption: <br />
+    - We split the plain text into equal blocks of 64 bits (8 bytes). If there is a remaining block that is not 64 bits long, we fill it with space characters. <br />
+    - We take each block, apply the initial permutation and split it <br />
+    - for each round, we use the formula: <br />
+        1. Left(n) = Right(n - 1); <br />
+        2. Right(n) = Left(n - 1) XOR FeistelFunction(Right(n - 1), Keys(n - 1)); <br />
+    - we use the keys in order for the rounds (from 1 to 16) <br />
+    - we apply the final permutation <br />
+    - we add each encrypted block to the final encrypted text <br />
+* For decryption: <br />
+    - We split the encrypted text into equal blocks of 64 bits (8 bytes) . If there is a remaining block that is not 64 bits long, we fill it with space characters. <br />
+    - We take each block, apply the initial permutation and split it <br />
+    - for each round, we use the formula: <br />
+        1. Left(n) = Right(n - 1); <br />
+        2. Right(n) = Left(n - 1) XOR FeistelFunction(Right(n - 1), Keys(16 - (n - 1))); <br />
+    - we use the keys in reverse order for the rounds (from 16 to 1) <br />
+    - we apply the final permutation <br />
+    - we add each decrypted block to the final plain text <br />
+
+For the purposes of the following two tests the keys will be of form "b^8", where "b" is a byte. <br />
+
+Implementation of the Double-DES (2DES) Cryptosystem with both encryption and decryption. We use two different 8-byte size keys, applying DES encryption with the first key, then with the second key on the output after the first key for encryption, and applying DES decryption with the second key, then with the first key on the output after the second key for decryption. <br />
+
+Implementation of the Man-in-the-Middle-Attack for 2DES Cryptosystem. We know a pair of (plainText, encryptedText) from a 2DES encryption.  <br />
+We encrypt the plainText with des with all 256 possible keys for the first key (of form "b^8), saving the output and the key at each step. <br /> 
+We then decrypt the encryptedText with all the 256 possible keys for the second key, and when we find the text we decrypted appears in the outputs saved from the previous test, we memorize the pair (first key, second key) as a possible key pair used for the 2DES cryptosystem. <br />
 
 # Homework 5
 
