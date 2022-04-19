@@ -1,7 +1,7 @@
 package util;
 
-public class BitStringConverter {
-    public static String convertMsgToBitString(String blockString) {
+public interface BitStringConverter {
+    static String convertMsgToBitString(String blockString) {
         StringBuilder blockBuilder = new StringBuilder();
         for (int charIndex = 0; charIndex < blockString.length(); ++charIndex) {
             String charBitString = Integer.toBinaryString(blockString.charAt(charIndex));
@@ -17,7 +17,7 @@ public class BitStringConverter {
         return blockBuilder.toString();
     }
 
-    public static String convertBitStringToMsg(String blockBitString) {
+    static String convertBitStringToMsg(String blockBitString) {
         StringBuilder blockMsgBuilder = new StringBuilder();
         for (int byteIndex = 0; byteIndex < blockBitString.length(); byteIndex += 8) {
             String chBitString = blockBitString.substring(byteIndex, byteIndex + 8);
