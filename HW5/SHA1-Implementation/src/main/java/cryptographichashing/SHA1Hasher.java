@@ -22,16 +22,16 @@ public class SHA1Hasher {
     private String bitStringMessage;
     private String resultHash;
 
-    private static int H0 = 0x67452301;
-    private static int H1 = 0xEFCDAB89;
-    private static int H2 = 0x98BADCFE;
-    private static int H3 = 0x10325476;
-    private static int H4 = 0xC3D2E1F0;
+    private int H0 = 0x67452301;
+    private int H1 = 0xEFCDAB89;
+    private int H2 = 0x98BADCFE;
+    private int H3 = 0x10325476;
+    private int H4 = 0xC3D2E1F0;
 
-    private static int K0 = 0x5A827999;
-    private static int K1 = 0x6ED9EBA1;
-    private static int K2 = 0x8F1BBCDC;
-    private static int K3 = 0xCA62C1D6;
+    private int K0 = 0x5A827999;
+    private int K1 = 0x6ED9EBA1;
+    private int K2 = 0x8F1BBCDC;
+    private int K3 = 0xCA62C1D6;
 
     // test variables
     private List<List<String>> hexValueWords = new ArrayList<>();
@@ -98,11 +98,11 @@ public class SHA1Hasher {
 
 
             // initialize hash values for the current chunk
-            String a = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(SHA1Hasher.H0), 32);
-            String b = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(SHA1Hasher.H1), 32);
-            String c = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(SHA1Hasher.H2), 32);
-            String d = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(SHA1Hasher.H3), 32);
-            String e = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(SHA1Hasher.H4), 32);
+            String a = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(H0), 32);
+            String b = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(H1), 32);
+            String c = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(H2), 32);
+            String d = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(H3), 32);
+            String e = BitStringHandler.padRightBitStringWithZeros(BitStringHandler.hexToBinaryString(H4), 32);
             intermediateValues.add(new ArrayList<>());
 
             // main loop
@@ -113,19 +113,19 @@ public class SHA1Hasher {
 
                 if (i < 20) {
                     bitWiseFunctionResult = bitWiseFunction1(b, c, d);
-                    kBitString = BitStringHandler.hexToBinaryString(SHA1Hasher.K0);
+                    kBitString = BitStringHandler.hexToBinaryString(K0);
                 }
                 else if (i < 40) {
                     bitWiseFunctionResult = bitWiseFunction2(b, c, d);
-                    kBitString = BitStringHandler.hexToBinaryString(SHA1Hasher.K1);
+                    kBitString = BitStringHandler.hexToBinaryString(K1);
                 }
                 else if (i < 60) {
                     bitWiseFunctionResult = bitWiseFunction3(b, c, d);
-                    kBitString = BitStringHandler.hexToBinaryString(SHA1Hasher.K2);
+                    kBitString = BitStringHandler.hexToBinaryString(K2);
                 }
                 else {
                     bitWiseFunctionResult = bitWiseFunction2(b, c, d);
-                    kBitString = BitStringHandler.hexToBinaryString(SHA1Hasher.K3);
+                    kBitString = BitStringHandler.hexToBinaryString(K3);
                 }
 
                 int temp = (int) (BitStringHandler.binaryStringToInteger(leftRotateBitString(a, 5)) +
@@ -165,18 +165,18 @@ public class SHA1Hasher {
             }
 
             // add this chunk's hash to the result
-            SHA1Hasher.H0 = (int) (SHA1Hasher.H0 + Long.parseLong(a, 2));
-            SHA1Hasher.H1 = (int) (SHA1Hasher.H1 + Long.parseLong(b, 2));
-            SHA1Hasher.H2 = (int) (SHA1Hasher.H2 + Long.parseLong(c, 2));
-            SHA1Hasher.H3 = (int) (SHA1Hasher.H3 + Long.parseLong(d, 2));
-            SHA1Hasher.H4 = (int) (SHA1Hasher.H4 + Long.parseLong(e, 2));
+            H0 = (int) (H0 + Long.parseLong(a, 2));
+            H1 = (int) (H1 + Long.parseLong(b, 2));
+            H2 = (int) (H2 + Long.parseLong(c, 2));
+            H3 = (int) (H3 + Long.parseLong(d, 2));
+            H4 = (int) (H4 + Long.parseLong(e, 2));
         }
 
-        String h1Length = Integer.toHexString(SHA1Hasher.H0);
-        String h2Length = Integer.toHexString(SHA1Hasher.H1);
-        String h3Length = Integer.toHexString(SHA1Hasher.H2);
-        String h4Length = Integer.toHexString(SHA1Hasher.H3);
-        String h5Length = Integer.toHexString(SHA1Hasher.H4);
+        String h1Length = Integer.toHexString(H0);
+        String h2Length = Integer.toHexString(H1);
+        String h3Length = Integer.toHexString(H2);
+        String h4Length = Integer.toHexString(H3);
+        String h5Length = Integer.toHexString(H4);
 
         // add leading 0's
         if(h1Length.length() < 8) {

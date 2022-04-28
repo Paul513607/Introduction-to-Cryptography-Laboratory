@@ -1,5 +1,6 @@
 package cryptographichashing;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.BitStringHandler;
@@ -15,28 +16,30 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SHA1HasherTest {
-    private static final double HAMMING_DIST_MARGIN = 0.5;
-    private SHA1Hasher sha1Hasher;
+    public static final double HAMMING_DIST_MARGIN = 0.4;
 
-    private String plainText;
-    private List<List<String>> hexValueWords = new ArrayList<>();
-    private List<List<List<String>>> intermediateValues = new ArrayList<>();
-    private String resultHash;
+    public String plainText;
+    public List<List<String>> hexValueWords;
+    public List<List<List<String>>> intermediateValues;
+    public String resultHash;
 
     @BeforeEach
-    private void clearTestData() {
-        sha1Hasher = null;
-
+    public void setUp() {
         plainText = null;
-        hexValueWords.forEach(List::clear);
-        hexValueWords.clear();
-        intermediateValues.forEach(list -> list.forEach(List::clear));
-        intermediateValues.forEach(List::clear);
-        intermediateValues.clear();
+        hexValueWords = new ArrayList<>();
+        intermediateValues = new ArrayList<>();
         resultHash = null;
     }
 
-    private void readFile1() throws FileNotFoundException {
+    @AfterEach
+    public void clearTestData() {
+        plainText = null;
+        hexValueWords = null;
+        intermediateValues = null;
+        resultHash = null;
+    }
+
+    public void readFile1() throws FileNotFoundException {
         File file = new File("src/main/resources/test-files/test-file1.txt");
         Scanner scanner = new Scanner(file);
 
@@ -78,7 +81,7 @@ class SHA1HasherTest {
         scanner.close();
     }
 
-    private void readFile2() throws FileNotFoundException {
+    public void readFile2() throws FileNotFoundException {
         File file = new File("src/main/resources/test-files/test-file2.txt");
         Scanner scanner = new Scanner(file);
 
@@ -150,7 +153,7 @@ class SHA1HasherTest {
     @Test
     public void testHashLength() {
         System.out.println("Running hash length test...");
-        sha1Hasher = new SHA1Hasher();
+        SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText("abc");
         sha1Hasher.hashPlainText();
         assertEquals(40, sha1Hasher.getResultHash().length());
@@ -178,7 +181,7 @@ class SHA1HasherTest {
         System.out.println(resultHash.toLowerCase());
         */
 
-        sha1Hasher = new SHA1Hasher();
+        SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(plainText);
         sha1Hasher.hashPlainText();
 
@@ -227,7 +230,7 @@ class SHA1HasherTest {
         System.out.println(resultHash.toLowerCase());
         */
 
-        sha1Hasher = new SHA1Hasher();
+        SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(plainText);
         sha1Hasher.hashPlainText();
 
@@ -261,7 +264,7 @@ class SHA1HasherTest {
         System.out.println("Running cascade (hamming distance) test...");
 
         String inputText = "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq";
-        sha1Hasher = new SHA1Hasher();
+        SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(inputText);
         sha1Hasher.hashPlainText();
 

@@ -5,8 +5,8 @@ public class Main {
         SHA1Hasher hasher = new SHA1Hasher();
 
         // read plainText to be hashed
-        hasher.readPlainTextFromUserInput();
-        // hasher.readPlainTextFromFile("src/main/resources/hasher-input-files/plainText-file1.txt");
+        // hasher.readPlainTextFromUserInput();
+        hasher.readPlainTextFromFile("src/main/resources/hasher-input-files/plainText-file1.txt");
         hasher.hashPlainText();
     }
 
