@@ -23,7 +23,7 @@ import java.util.concurrent.Future;
 @Data
 @NoArgsConstructor
 public class BirthdayAttack implements Serializable {
-    public static final int HASH_BIT_SIZE = 32;
+    public static final int HASH_BIT_SIZE = 16;
     public static final int NO_OF_GENERATIONS = ((int) Math.pow(2, HASH_BIT_SIZE / 2.0));
 
     private String legitMessage;
@@ -133,7 +133,8 @@ public class BirthdayAttack implements Serializable {
         }
         TryCounter.hashToTextSearch.put(fakeSHA1Hasher.getResultHash(), fraudulentMessage);
 
-        while (TryCounter.hashToTextSearch.size() < NO_OF_GENERATIONS) {
+        boolean matchFound = false;
+        while (!matchFound) {
             String currString = BitStringHandler.convertBitStringToMsg(makeMinorModificationsToMessage(fraudulentMessageBitString));
 
             fakeSHA1Hasher = new FakeSHA1Hasher();
@@ -148,7 +149,7 @@ public class BirthdayAttack implements Serializable {
                 System.out.println();
                 System.out.println("Fraudulent text modification: " + currString);
                 System.out.println("--------------------------");
-                break;
+                matchFound = true;
             }
 
             TryCounter.hashToTextSearch.put(fakeSHA1Hasher.getResultHash(), currString);

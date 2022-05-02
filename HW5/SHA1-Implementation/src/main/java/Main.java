@@ -27,7 +27,10 @@ public class Main {
         birthdayAttack.saveData();
         */
 
-        birthdayAttack = BirthdayAttackLogger.loadBirthdayAttackData();
+        birthdayAttack.readTextFromFile("src/main/resources/hasher-input-files/legitMessage-file1.txt", 0);
+        birthdayAttack.readTextFromFile("src/main/resources/hasher-input-files/fraudulentMessage-file1.txt", 1);
+        birthdayAttack.setUpHashesForLegitMessageModifications();
+        // birthdayAttack = BirthdayAttackLogger.loadBirthdayAttackData();
 
         // start the attack to find collisions
         birthdayAttack.searchForCollisionsInFraudulentMessageModifications();
