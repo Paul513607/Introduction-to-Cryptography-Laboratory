@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/** Class with an implementation for the SHA-1 hashing algorithm. */
 @Data
 @NoArgsConstructor
 public class SHA1Hasher {
@@ -241,6 +242,5 @@ public class SHA1Hasher {
     public void hashPlainText() {
         doPreProcessing();
         processMessageAsChunks();
-        System.out.println("Hash: " + resultHash);
     }
 }

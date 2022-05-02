@@ -1,5 +1,6 @@
 package util;
 
+/** Util class for working with bitStrings. */
 public class BitStringHandler {
     public static String binaryToHexString(String binaryString) {
         return Integer.toHexString((int) Long.parseLong(binaryString, 2));

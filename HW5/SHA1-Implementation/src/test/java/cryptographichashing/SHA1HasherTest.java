@@ -150,15 +150,18 @@ class SHA1HasherTest {
         scanner.close();
     }
 
+    /** Test which asserts that the length (of the hexadecimal string) of the hash from the SHA1Hasher is 40. */
     @Test
     public void testHashLength() {
         System.out.println("Running hash length test...");
         SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText("abc");
         sha1Hasher.hashPlainText();
+        System.out.println("Hash: " + sha1Hasher.getResultHash());
         assertEquals(40, sha1Hasher.getResultHash().length());
     }
 
+    /** Test which checks the intermediate values (of the test vector) for a SHA1Hasher run on the plainText "abc". */
     @Test
     public void testWithTestVector1() {
         System.out.println("Running test vector 1 test...");
@@ -184,6 +187,7 @@ class SHA1HasherTest {
         SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(plainText);
         sha1Hasher.hashPlainText();
+        System.out.println("Hash: " + sha1Hasher.getResultHash());
 
         for (int blockIndex = 0; blockIndex < hexValueWords.size(); ++blockIndex)
             for (int wordIndex = 0; wordIndex < hexValueWords.get(blockIndex).size(); ++wordIndex) {
@@ -208,6 +212,7 @@ class SHA1HasherTest {
         assertEquals(resultHash.toLowerCase(), sha1Hasher.getResultHash().toLowerCase());
     }
 
+    /** Test which checks the intermediate values (of the test vector) for a SHA1Hasher run on the plainText "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq". */
     @Test
     public void testWithTestVector2() {
         System.out.println("Running test vector 2 test...");
@@ -233,6 +238,7 @@ class SHA1HasherTest {
         SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(plainText);
         sha1Hasher.hashPlainText();
+        System.out.println("Hash: " + sha1Hasher.getResultHash());
 
         for (int blockIndex = 0; blockIndex < hexValueWords.size(); ++blockIndex) {
             for (int wordIndex = 0; wordIndex < hexValueWords.get(blockIndex).size(); ++wordIndex) {
@@ -259,6 +265,8 @@ class SHA1HasherTest {
         assertEquals(resultHash.toLowerCase(), sha1Hasher.getResultHash().toLowerCase());
     }
 
+    /** Test which checks the cascade effect of the SHA1Hasher by hashing two similar (but not equal) plainTexts
+     * and calculating the Hamming distance between their hashes. */
     @Test
     public void testHammingDistance() {
         System.out.println("Running cascade (hamming distance) test...");
@@ -267,6 +275,7 @@ class SHA1HasherTest {
         SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(inputText);
         sha1Hasher.hashPlainText();
+        System.out.println("Hash: " + sha1Hasher.getResultHash());
 
         String resultHash1 = new BigInteger(sha1Hasher.getResultHash(), 16).toString(2);
         resultHash1 = BitStringHandler.padRightBitStringWithZeros(resultHash1, 160);
@@ -275,6 +284,7 @@ class SHA1HasherTest {
         sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(inputText);
         sha1Hasher.hashPlainText();
+        System.out.println("Hash: " + sha1Hasher.getResultHash());
 
         String resultHash2 = new BigInteger(sha1Hasher.getResultHash(), 16).toString(2);
         resultHash2 = BitStringHandler.padRightBitStringWithZeros(resultHash2, 160);
