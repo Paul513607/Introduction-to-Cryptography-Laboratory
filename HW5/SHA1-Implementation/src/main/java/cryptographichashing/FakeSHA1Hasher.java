@@ -37,6 +37,6 @@ public class FakeSHA1Hasher {
         SHA1Hasher sha1Hasher = new SHA1Hasher();
         sha1Hasher.setPlainText(plainText);
         sha1Hasher.hashPlainText();
-        resultHash = sha1Hasher.getResultHash().substring(0, 4); // keep only the first 32 bits of the original hashed string (i.e. the first 8 hexadecimal values)
+        resultHash = sha1Hasher.getResultHash().substring(0, 8); // keep only the first 32 bits of the original hashed string (i.e. the first 8 hexadecimal values)
     }
 }

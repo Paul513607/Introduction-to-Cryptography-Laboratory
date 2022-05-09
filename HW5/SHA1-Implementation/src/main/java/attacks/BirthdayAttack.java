@@ -23,7 +23,7 @@ import java.util.concurrent.Future;
 @Data
 @NoArgsConstructor
 public class BirthdayAttack implements Serializable {
-    public static final int HASH_BIT_SIZE = 16;
+    public static final int HASH_BIT_SIZE = 32;
     public static final int NO_OF_GENERATIONS = ((int) Math.pow(2, HASH_BIT_SIZE / 2.0));
 
     private String legitMessage;
