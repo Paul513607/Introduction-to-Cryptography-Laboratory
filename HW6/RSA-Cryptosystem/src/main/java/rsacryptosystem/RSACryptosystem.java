@@ -1,9 +1,8 @@
 package rsacryptosystem;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import util.BitStringHandler;
+import util.Timer;
 import util.UtilCalculator;
 
 import java.io.File;
@@ -12,12 +11,14 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /** RCA implementation for both encryption and decryption. */
 @Data
-public class RCACryptosystem {
-    private final int MAX_BIT_SIZE = 64;
+public class RSACryptosystem {
+    private final int MAX_BIT_SIZE = 1024;
     private BigInteger P, Q;
     private BigInteger N, phiN;
     private BigInteger E = BigInteger.valueOf(2).pow(16).add(BigInteger.valueOf(1));
@@ -26,15 +27,12 @@ public class RCACryptosystem {
     private String plainText;
     private String encryptedText;
 
-    public RCACryptosystem() {
-        generateKeys();
+    public RSACryptosystem() {
     }
 
-    public RCACryptosystem(String plainText, String encryptedText) {
+    public RSACryptosystem(String plainText, String encryptedText) {
         this.plainText = plainText;
         this.encryptedText = encryptedText;
-
-        generateKeys();
     }
 
     private void chooseE() {
@@ -46,7 +44,7 @@ public class RCACryptosystem {
         }
     }
 
-    private void chooseD() {
+    public void chooseD() {
         boolean foundD = false;
         for (long i = 1; !foundD; ++i) {
             BigInteger intermediateVal = phiN.multiply(BigInteger.valueOf(i))
@@ -59,7 +57,7 @@ public class RCACryptosystem {
         }
     }
 
-    private void generateKeys() {
+    public void generateKeys() {
         // Setup two different 1024-bit prime numbers and N, their product
         Random rnd = new Random();
         P = BigInteger.probablePrime(MAX_BIT_SIZE, rnd);
@@ -112,13 +110,29 @@ public class RCACryptosystem {
 
     private String decryptBlockDummy(String block) {
         String blockBitString = BitStringHandler.convertMsgToBitString(block);
+        BigInteger blockBigInt = new BigInteger(blockBitString, 2);
+        Map<BigInteger, BigInteger> powerToValueMod = new HashMap<>();
 
-        BigInteger resultBigInt = new BigInteger(blockBitString, 2);
-        for (BigInteger i = BigInteger.ZERO; i.compareTo(D) < 0; i = i.add(BigInteger.ONE)) {
-            resultBigInt = resultBigInt.multiply(resultBigInt).mod(N);
+        powerToValueMod.put(BigInteger.ZERO, BigInteger.ONE);
+        powerToValueMod.put(BigInteger.ONE, blockBigInt.mod(N));
+        for (BigInteger i = BigInteger.TWO; i.compareTo(D) <= 0; i = i.multiply(BigInteger.TWO)) {
+            BigInteger prevResult = powerToValueMod.get(i.divide(BigInteger.TWO));
+            powerToValueMod.put(i, prevResult.multiply(prevResult).mod(N));
         }
 
-        String resultBitString = resultBigInt.toString(2);
+        String bitStringD = D.toString(2);
+
+        BigInteger result = BigInteger.ONE;
+        BigInteger fact = BigInteger.ONE;
+        for (int index = bitStringD.length() - 1; index >= 0; index--) {
+            if (bitStringD.charAt(index) == '1') {
+                result = result.multiply(powerToValueMod.get(fact)).mod(N);
+            }
+
+            fact = fact.multiply(BigInteger.TWO);
+        }
+
+        String resultBitString = result.toString(2);
         int remainingLen = resultBitString.length() % 8;
         if (remainingLen % 8 != 0) {
             resultBitString = "0".repeat(8 - remainingLen) + resultBitString;
@@ -126,6 +140,7 @@ public class RCACryptosystem {
 
         return BitStringHandler.convertBitStringToMsg(resultBitString);
     }
+    // Decryption took: 0.052477671s (seconds).
 
     private String decryptBlock(String block) {
         String blockBitString = BitStringHandler.convertMsgToBitString(block);
@@ -145,11 +160,13 @@ public class RCACryptosystem {
         String blockBitString = BitStringHandler.convertMsgToBitString(block);
         BigInteger blockBigInt = new BigInteger(blockBitString, 2);
 
-        BigInteger pExp = D.mod(P.subtract(BigInteger.valueOf(1)));
-        BigInteger decryptP = blockBigInt.mod(P).modPow(pExp, P);
+        BigInteger pExp = D.mod(P.subtract(BigInteger.ONE));
+        BigInteger decryptP = blockBigInt.mod(P);
+        decryptP = decryptP.modPow(pExp, P);
 
-        BigInteger qExp = D.mod(Q.subtract(BigInteger.valueOf(1)));
-        BigInteger decryptQ = blockBigInt.mod(Q).modPow(qExp, Q);
+        BigInteger qExp = D.mod(Q.subtract(BigInteger.ONE));
+        BigInteger decryptQ = blockBigInt.mod(Q);
+        decryptQ = decryptQ.modPow(qExp, Q);
 
         BigInteger maxPrime, remainder1, minPrime, remainder2;
         if (P.compareTo(Q) > 0) {
@@ -167,18 +184,20 @@ public class RCACryptosystem {
         maxPrime = maxPrime.mod(minPrime);
         // maxPrime * X + remainder1 = remainder2 mod minPrime
         remainder2 = remainder2.subtract(remainder1);
-        if (remainder2.compareTo(BigInteger.ZERO) < 0)
-            remainder2 = minPrime.add(remainder2);
-
-        // maxPrimeSimplified * X = remainder mod minPrime
-        for (BigInteger myNum = BigInteger.ONE; myNum.compareTo(minPrime) < 0;
-             myNum = myNum.add(BigInteger.ONE)) {
-            if (maxPrime.multiply(myNum).mod(minPrime).equals(BigInteger.ZERO)) {
-                remainder2 = remainder2.multiply(myNum).mod(minPrime);
-                break;
+        if (remainder2.equals(BigInteger.ZERO)) {
+            remainder2 = remainder1;
+        } else {
+            if (remainder2.compareTo(BigInteger.ZERO) < 0) {
+                BigInteger temp = remainder2.abs();
+                temp = temp.mod(minPrime);
+                temp = temp.negate();
+                remainder2 = minPrime.add(temp);
             }
+            // maxPrimeSimplified * X = remainder mod minPrime
+            // modular inverse of maxPrimeSimplified is maxPrimeSimplified^(minPrime - 2) since minPrime is prime
+            // by Fermat's little theorem
+            remainder2 = remainder2.multiply(maxPrime.modPow(minPrime.subtract(BigInteger.TWO), minPrime)).mod(minPrime);
         }
-
 
         String resultBitString = remainder2.toString(2);
         int remainingLen = resultBitString.length() % 8;
@@ -188,6 +207,7 @@ public class RCACryptosystem {
 
         return BitStringHandler.convertBitStringToMsg(resultBitString);
     }
+    // Decryption took: 0.003296043s (seconds).
 
     public void decryptEncryptedText() {
         StringBuilder decryptedTextBuilder = new StringBuilder();
@@ -198,17 +218,29 @@ public class RCACryptosystem {
 
             String resultText = decryptBlockDummy(block);
             // String resultText = decryptBlock(block);
-            // String resultText = decryptBlockCRT(block);
+            resultText = decryptBlockCRT(block);
             decryptedTextBuilder.append(resultText);
         }
 
         // treat the final block as well
         String block = encryptedText.substring(blockIndex);
 
+        Timer timer = Timer.getInstance();
+        timer.start();
+
         String resultText = decryptBlockDummy(block);
         // String resultText = decryptBlock(block);
-        // String resultText = decryptBlockCRT(block);
+
+        timer.stop();
+        timer.showTimeTakenWithMessage("Duration for 'decryptBlockDummy': ");
+
+        timer.start();
+
+        resultText = decryptBlockCRT(block);
         decryptedTextBuilder.append(resultText);
+
+        timer.stop();
+        timer.showTimeTakenWithMessage("Duration for 'decryptBlockCRT': ");
 
         plainText = decryptedTextBuilder.toString();
         System.out.println("Done with decryption!");
