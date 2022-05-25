@@ -71,3 +71,11 @@ We store the hashes along with the minor-changed texts into a HashMap (it maps a
 Afterwards, we try generate up to 2^(32/2) small changes to the attacker's text, such that their hashes are different, checking at each step if the hash we got appears in the map build for the original text's saved hashes (for the minor changes). <br /> <br />
 
 # Homework 6
+Implementation of the RSA Cryptosystem. First, we setup our constants (for the public and private key): we generate two prime numbers, __P__ and __Q__, on 1024 bits each, and we get their product, __N__. We calculate __phiN = (P - 1) * (Q - 1)__. We generate __E__ on 32-bits, coprime with phiN. We generate __D__, such that __D * E = -1 mod phiN__. <br />
+The encryption is done by doing __plainText^E mod N__, and de decryption is done with __encryptedText^D mod N__. Since D is a very big number we implement a way to raise to the power D by dynamic programming: calculate the powers of two up until D, then get D's binary representation and calculate the result. <br />
+We also implement a test, which tests that __decrypt(encrypt(text))  = text__. <br /> <br />
+
+For the second part, we try to make the decryption even faster, by doing it using the Chinese Remainder Theorem (solving the system gives us the solution to the power-raise calculation). <br /> <br />
+
+For the last part, we implement __Wiener's attack__. We first need a different setup for the RSACryptosystem: we make sure that when we generate P and Q, __P < Q < 2 * P__ (or __Q < P < 2 * Q__). Then we generate D on 512 bits, and afterwards we find E (s.t. D * E = -1 mod phiN). <br />
+The attack goes as follows: we need to find the private key (D, P, Q); we generate the convergent functions of __E / N__ until we find a solution (which is a whole number). When we find a solution, we also found a candidate for __D__ and __phiN__. In order to find if the solution is good, we check that the equation __x^2 - (N - phiN + 1) * x + N = 0__ has integer solutions. If true, we've found our solution __(D, phiN)__, else we keep going until we can't anymore. After knowing __N__ and __phiN__, finding __P__ and __Q__ is trivial. <br /> <br />

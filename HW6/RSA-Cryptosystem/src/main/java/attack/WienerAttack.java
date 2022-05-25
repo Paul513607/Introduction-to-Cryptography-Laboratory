@@ -9,6 +9,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Data
@@ -55,7 +56,7 @@ public class WienerAttack {
     }
 
     private Pair<BigInteger, BigInteger> sumConvergents(List<BigInteger> convergents) {
-        if (convergents.size() == 1 && convergents.get(0) == BigInteger.ZERO) {
+        if (convergents.size() == 1 && Objects.equals(convergents.get(0), BigInteger.ZERO)) {
             return new Pair<>(BigInteger.ZERO, BigInteger.ONE);
         }
 
@@ -111,7 +112,7 @@ public class WienerAttack {
 
     public void runAttack(BigInteger N, BigInteger E) {
         BigInteger phiN = BigInteger.ONE;
-        BigInteger D = BigInteger.ZERO;
+        BigInteger D    ;
         List<BigInteger> convergentList = new ArrayList<>();
 
         BigInteger val = E;
